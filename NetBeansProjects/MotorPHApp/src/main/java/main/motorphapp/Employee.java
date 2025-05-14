@@ -45,4 +45,14 @@ public class Employee {
     public float getSalary() {
         return salary;
     }
+    
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
 }
