@@ -37,22 +37,10 @@ Java Swing (for GUI)
 
 NetBeans IDE
 
-📂 Project Structure
-graphql
-Copy
-Edit
-src/
-├── MotorPHGUI.java        # Main GUI window and logic
-├── Employee.java          # Employee data model
-├── Tax.java               # Tax calculation class
-├── Payroll.java           # Payroll computation class
-🚀 How to Run
-Clone the repository:
-
 bash
 Copy
 Edit
-git clone https://github.com/your-username/motorph-gui-app.git
+git clone https://github.com/ayoumax/GROUP5/
 cd motorph-gui-app
 Open in NetBeans IDE or any Java IDE.
 
