@@ -37,9 +37,6 @@ Java Swing (for GUI)
 
 NetBeans IDE
 
-bash
-Copy
-Edit
 git clone https://github.com/ayoumax/GROUP5/
 cd motorph-gui-app
 Open in NetBeans IDE or any Java IDE.
