@@ -1,50 +1,87 @@
-MotorPH Employee App – GUI-Based Version
+# 🚀 MotorPH Employee App – GUI Version
 
-📋 Project Description
-This is the Graphical User Interface (GUI) implementation of the MotorPH Employee App based on the class diagram designed in Lab Work #1 and enhanced through the change request MPHCR-01.
+This project is the Graphical User Interface (GUI) implementation of the **MotorPH Employee App**. It is developed based on the company’s class diagram and integrates the approved change request **MPHCR-01** to transition from a console-based to a GUI-based application.
 
-This version provides:
+---
 
-A user-friendly interface for employees and payroll processing.
+## 📌 Project Objectives
 
-Input validation and exception handling for Employee ID and Pay Coverage.
+- Convert the original **console-based MotorPH Employee App** into a **GUI-based version** using Java Swing.
+- Implement **exception handling** for user input, particularly:
+  - **Employee ID** (must be a valid integer)
+  - **Pay Coverage** (must be a positive number)
 
-Simple salary computation including tax deduction and net pay display.
+---
 
-🛠 Features Implemented
-GUI built using Java Swing.
+## 🛠 Features
 
-Input validation for:
+- Interactive Swing-based GUI form
+- Basic salary computation
+- Tax calculation with a 12% tax rate
+- Payslip generation with net salary
+- Validation of input fields using `try-catch` blocks and error messages
 
-Employee Number (must be a valid integer)
+---
 
-Pay Coverage (must be a positive number)
+## 📂 Project Structure
 
-Salary computation including:
+src/
+├── MotorPHGUI.java # GUI form with all Swing components
+├── Employee.java # Employee data model class
+├── Tax.java # Tax calculation logic
+├── Payroll.java # Payroll computation logic
 
-Gross Salary
+---
 
-Tax Calculation (12% by default)
+## ✅ Sample Usage
 
-Net Salary
+**Input:**
+- Employee ID: `101`
+- Pay Coverage (days): `20`
 
-Error messages displayed using try-catch blocks.
+**Output:**
 
-📦 Technologies Used
-Java SE
+Employee ID: 101
+Position: Developer
+Pay Days: 20
+Gross Salary: ₱10000.0
+Tax: ₱1200.0
+Net Salary: ₱10800.0
 
-Java Swing (for GUI)
 
-NetBeans IDE
+---
 
-git clone https://github.com/ayoumax/GROUP5/
-cd motorph-gui-app
-Open in NetBeans IDE or any Java IDE.
+## 📋 Technologies Used
 
-Set MotorPHGUI as the main class in project properties.
+- Java SE
+- Java Swing (GUI)
+- NetBeans IDE 12/13/18+
 
-Run the project (F6 or right-click → Run).
+---
 
-Converted console-based MotorPH Employee App to a GUI application.
+## 📎 How to Run the Project
 
-Added exception handling for Employee ID and Pay Coverage inputs.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ayoumax/GROUP5
+   cd motorph-employee-gui
+
+   Open the project in NetBeans IDE.
+
+Ensure MotorPHGUI.java is set as the main class:
+
+Right-click the project → Properties → Run → Main Class → MotorPHGUI
+
+Click Run Project (F6) to launch the GUI.
+
+🔄 Change Request Reference
+This project is based on the approved change MPHCR-01 from the Change Request Compilation:
+
+DESCRIPTION OF CHANGE:
+Provision of a more intuitive and interactive interface in the MotorPH Employee App by implementing a version of the application that has a Graphical User Interface.
+
+COMMENTS:
+
+Convert the console-based application to a working GUI-based application.
+
+Provide exception handling for the input of Employee Number and Pay Coverage.
