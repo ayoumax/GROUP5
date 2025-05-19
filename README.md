@@ -50,18 +50,6 @@ Input Field	Sample Value
 Employee ID	101
 Pay Coverage (days)	22
 
-✅ Sample Output
-yaml
-Copy
-Edit
-Employee ID: 101
-Position: Developer
-Pay Days: 22
-Gross Salary: ₱11000.0
-Tax: ₱1320.0
-Net Salary: ₱11780.0
-🧾 Change Request Reference
-This update implements MPHCR-01:
 
 Converted console-based MotorPH Employee App to a GUI application.
 
