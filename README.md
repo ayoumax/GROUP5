@@ -45,12 +45,6 @@ Set MotorPHGUI as the main class in project properties.
 
 Run the project (F6 or right-click → Run).
 
-🧪 Sample Test Inputs
-Input Field	Sample Value
-Employee ID	101
-Pay Coverage (days)	22
-
-
 Converted console-based MotorPH Employee App to a GUI application.
 
 Added exception handling for Employee ID and Pay Coverage inputs.
