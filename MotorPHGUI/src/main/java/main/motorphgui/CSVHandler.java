@@ -18,16 +18,18 @@ public class CSVHandler {
                 CompensationDetails comp = emp.getCompensationDetails();
                 GovernmentDetails gov = emp.getGovernmentDetails();
 
-                bw.write(emp.getEmployeeId() + "," +
-                         emp.getName() + "," +
-                         emp.getAge() + "," +
-                         emp.getPosition() + "," +
-                         comp.getBasicSalary() + "," +
-                         comp.getAllowance() + "," +
-                         gov.getSssNumber() + "," +
-                         gov.getPhilHealthNumber() + "," +
-                         gov.getPagIbigNumber());
-                bw.newLine();
+      bw.write(emp.getEmployeeId() + "," +
+         emp.getLastName() + "," +
+         emp.getFirstName() + "," +
+         emp.getAge() + "," +
+         emp.getPosition() + "," +
+         comp.getBasicSalary() + "," +
+         comp.getAllowance() + "," +
+         gov.getSssNumber() + "," +
+         gov.getPhilHealthNumber() + "," +
+         gov.getTin() + "," +
+         gov.getPagIbigNumber());
+bw.newLine();
             }
         } catch (IOException e) {
             System.err.println("Error saving employees: " + e.getMessage());
@@ -41,21 +43,23 @@ public class CSVHandler {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length >= 9) {
-                    int id = Integer.parseInt(parts[0]);
-                    String name = parts[1];
-                    int age = Integer.parseInt(parts[2]);
-                    String position = parts[3];
-                    float salary = Float.parseFloat(parts[4]);
-                    float allowance = Float.parseFloat(parts[5]);
-                    String sss = parts[6];
-                    String philHealth = parts[7];
-                    String pagIbig = parts[8];
-
+                if (parts.length >= 11) {
+                    int id = Integer.parseInt(parts[0].trim().replaceAll("\"",""));
+                    String lastName = parts[1].trim();
+                    String firstName = parts[2].trim();
+                    int age = Integer.parseInt(parts[3].trim().replaceAll("\"",""));
+                    String position = parts[4].trim();
+                    float salary = Float.parseFloat(parts[5].trim().replaceAll("\"",""));
+                    float allowance = Float.parseFloat(parts[6].trim().replaceAll("\"",""));
+                    String sss = parts[7].trim();
+                    String philHealth = parts[8].trim();
+                    String tin = parts[9].trim();
+                    String pagIbig = parts[10].trim();
+                    
+                    GovernmentDetails gov = new GovernmentDetails(sss, philHealth, tin, pagIbig);
                     CompensationDetails comp = new CompensationDetails(salary, allowance);
-                    GovernmentDetails gov = new GovernmentDetails(sss, philHealth, pagIbig);
-
-             Employee emp = new Employee(id, name, age, position, salary, gov, comp); // Fixed instantiation
+                    
+             Employee emp = new Employee(id,lastName, firstName, age, position, salary, gov, comp); // Fixed instantiation
                     employees.add(emp);
                    
                 }

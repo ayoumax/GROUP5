@@ -11,25 +11,49 @@ package main.motorphgui;
 public class GovernmentDetails {
     private String sssNumber;
     private String philHealthNumber;
+    private String tin;
     private String pagIbigNumber;
+    
 
-    public GovernmentDetails(String sssNumber, String philHealthNumber, String pagIbigNumber) {
+    public GovernmentDetails(String sssNumber, String philHealthNumber,String tin, String pagIbigNumber) {
         this.sssNumber = sssNumber;
         this.philHealthNumber = philHealthNumber;
+        this.tin = tin;
         this.pagIbigNumber = pagIbigNumber;
     }
 
-    // Getters and Setters
-
-    String getSssNumber() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String getSssNumber() {
+        return sssNumber;
     }
 
-    String getPhilHealthNumber() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String getPhilHealthNumber() {
+        return philHealthNumber;
     }
 
-    char[] getPagIbigNumber() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String getTin() {
+        return tin;
+    }
+
+    public String getPagIbigNumber() {
+        return pagIbigNumber;
+    }
+
+    // Optional setters if you want to allow editing
+    public void setSssNumber(String sssNumber) {
+        this.sssNumber = sssNumber;
+    }
+
+    public void setPhilHealthNumber(String philHealthNumber) {
+        this.philHealthNumber = philHealthNumber;
+    }
+
+    public void setTin(String tin) {
+        this.tin = tin;
+    }
+
+    public void setPagIbigNumber(String pagIbigNumber) {
+        this.pagIbigNumber = pagIbigNumber;
     }
 }
+
+    

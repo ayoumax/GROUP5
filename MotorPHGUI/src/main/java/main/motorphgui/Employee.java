@@ -17,23 +17,30 @@ import main.motorphgui.Payslip;
 public class Employee {
 
     private int employeeId;
-    private String name;
+    private String lastName;
+    private String firstName;
     private int age;
     private String position;
     private float salary; // per day
     private GovernmentDetails govDetails; 
     private CompensationDetails compensation;
     float calculateTax;
+ 
 
-    public Employee(int employeeId, String name, int age, String position, float salary, 
+    public Employee(int employeeId, String lastName, String firstName,int age, String position, float salary, 
             GovernmentDetails govDetails, CompensationDetails compensation) {
         this.employeeId = employeeId;
-        this.name = name;
+        this.lastName = lastName;
+        this.firstName = firstName;
         this.age = age;
         this.position = position;
         this.salary = salary;
          this.govDetails = govDetails;
         this.compensation = compensation;
+    }
+
+    Employee(int id, String fullName, int age, String position, float salary, GovernmentDetails gov, CompensationDetails comp) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
         // Getters and Setters
     public int getEmployeeId() {
@@ -44,12 +51,19 @@ public class Employee {
         this.employeeId = employeeId;
     }
 
-    public String getName() {
-        return name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLastName(String lastname) {
+        this.lastName = lastName;
+    }
+     public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstname) {
+        this.firstName = firstName;
     }
 
     public int getAge() {
@@ -99,8 +113,9 @@ public class Employee {
         return new Payslip(this.employeeId, salary, tax, netPay);
     }
 
-    public boolean updateProfile(String newName, int newAge, String newPosition, float newSalary) {
-        this.name = newName;
+    public boolean updateProfile(String newLastName,String newFirstName, int newAge, String newPosition, float newSalary) {
+        this.lastName = newLastName;
+        this.firstName = newFirstName;
         this.age = newAge;
         this.position = newPosition;
         this.salary = newSalary;
@@ -129,12 +144,11 @@ public class Employee {
         return List.of(salary, calculateTax());
     }
 
-    CompensationDetails getCompensationDetails() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public CompensationDetails getCompensationDetails() {
+    return compensation;
     }
 
-    GovernmentDetails getGovernmentDetails() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public GovernmentDetails getGovernmentDetails() {
+    return govDetails;
 }
-   
+}
