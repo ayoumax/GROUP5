@@ -35,20 +35,6 @@ This Java Swing-based application allows MotorPH administrators to manage employ
   - Data is appended to the CSV file.
   - The employee list table is refreshed with the new entry.
   - 
----
-
-## 📂 Project Structure
-
-src/
-├── MainApp.java # Entry point
-├── EmployeeTableFrame.java # Main window with JTable
-├── EmployeeDetailFrame.java # Frame showing selected employee + salary computation
-├── NewEmployeeForm.java # Form for adding new employee
-├── Employee.java # Employee data model
-├── CSVUtils.java # Helper methods for reading/writing CSV
-
-
----
 
 ## 💾 Data Storage
 
