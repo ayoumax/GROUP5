@@ -1,6 +1,61 @@
-1.  Add a form or frame that displays the following fields for all employees in a JTable: Employee Number, Last Name, First Name, SSS Number, PhilHealth Number, TIN, and Pag-IBIG Number.
-2.  Allow the user to select an employee from the table and click the ""View Employee"" button to open a new frame displaying the employee’s full details.
-3.  In the new frame, prompt the user to select the month for which the program will compute the employee’s salary.
-4.  After clicking the ""Compute"" button, display both the employee’s details and the computed salary information within the same frame.
-5. Add a ""New Employee"" button that opens a form for entering new employee information.
-6. Upon submission, the new employee’s data should be appended to the CSV file, and the JTable should refresh to show the updated list of employees."										
+# 🧾 MotorPH Employee Management System (with GUI and CSV Integration)
+
+This Java Swing-based application allows MotorPH administrators to manage employee records, compute salaries, and store employee data using a CSV-based backend.
+
+---
+
+## ✅ Features Implemented
+
+### 1. **Employee Data Table (JTable)**
+- Displays a list of employees using a `JTable` with the following fields:
+  - Employee Number
+  - Last Name
+  - First Name
+  - SSS Number
+  - PhilHealth Number
+  - TIN
+  - Pag-IBIG Number
+- Data is loaded from a CSV file on startup.
+
+### 2. **View Employee Details**
+- Allows users to select an employee from the table and click **"View Employee"**.
+- Opens a new frame showing **full employee details**.
+- User is prompted to select a **month** for salary computation.
+
+### 3. **Salary Computation**
+- After selecting the month and clicking **"Compute"**, the frame displays:
+  - Employee information
+  - Computed gross salary, deductions, and net pay
+- Uses formulas based on attendance or standard monthly hours.
+
+### 4. **New Employee Registration**
+- Click **"New Employee"** to open a form.
+- Input fields for new employee details.
+- On submit:
+  - Data is appended to the CSV file.
+  - The employee list table is refreshed with the new entry.
+  - 
+---
+
+## 📂 Project Structure
+
+src/
+├── MainApp.java # Entry point
+├── EmployeeTableFrame.java # Main window with JTable
+├── EmployeeDetailFrame.java # Frame showing selected employee + salary computation
+├── NewEmployeeForm.java # Form for adding new employee
+├── Employee.java # Employee data model
+├── CSVUtils.java # Helper methods for reading/writing CSV
+
+
+---
+
+## 💾 Data Storage
+
+All employee records are stored in a file named:
+Open the project in NetBeans IDE.
+
+Run the application:
+
+Right-click MainApp.java → Run
+
