@@ -38,10 +38,8 @@ This Java Swing-based application allows MotorPH administrators to manage employ
 
 ## 💾 Data Storage
 
-All employee records are stored in a file named:
-Open the project in NetBeans IDE.
+All employee records are stored in a file named: Employee
 
 Run the application:
-
 Right-click MainApp.java → Run
 
