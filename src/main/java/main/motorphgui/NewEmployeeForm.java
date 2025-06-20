@@ -12,17 +12,17 @@ import java.awt.*;
  * @author WINDOWS 10
  */
 public class NewEmployeeForm extends JFrame{
-    private JTextField txtFirstName, txtLastName, txtAge, txtPosition, txtSalary, txtAllowance;
+    private JTextField txtFirstName, txtLastName, txtSalary, txtAllowance;
     private JTextField txtSSS, txtPhil, txtTIN, txtPagibig;
     private EmployeeTableFrame parentFrame;
 
     public NewEmployeeForm(EmployeeTableFrame parent) {
          this.parentFrame = parent;
-        setTitle("Add New Employee");
+        setTitle("New Employee");
         setSize(400, 450);
         setLayout(null);
 
-        String[] labels = {"First Name", "Last Name", "Age", "Position", "Salary", "Allowance", "SSS", "PhilHealth", "TIN", "PagIBIG"};
+        String[] labels = {"First Name", "Last Name", "Salary", "Allowance", "SSS", "PhilHealth", "TIN", "PagIBIG"};
         JTextField[] fields = new JTextField[labels.length];
         for (int i = 0; i < labels.length; i++) {
             JLabel lbl = new JLabel(labels[i] + ":");
@@ -34,9 +34,14 @@ public class NewEmployeeForm extends JFrame{
             add(fields[i]);
         }
 
-        txtFirstName = fields[0]; txtLastName = fields[1]; txtAge = fields[2]; txtPosition = fields[3];
-        txtSalary = fields[4]; txtAllowance = fields[5]; txtSSS = fields[6]; txtPhil = fields[7];
-        txtTIN = fields[8]; txtPagibig = fields[9];
+        txtFirstName = fields[0];
+        txtLastName = fields[1];
+        txtSalary = fields[2];
+        txtAllowance = fields[3];
+        txtSSS = fields[4];
+        txtPhil = fields[5];
+        txtTIN = fields[6];
+        txtPagibig = fields[7];
 
         JButton btnSave = new JButton("Save");
         btnSave.setBounds(130, 370, 100, 30);
@@ -47,13 +52,40 @@ public class NewEmployeeForm extends JFrame{
 
     private void saveNewEmployee() {
         try {
-            int id = (int)(System.currentTimeMillis() % 100000); // Simple ID generation
+            // Validate required text fields
+            if (txtFirstName.getText().trim().isEmpty() || txtLastName.getText().trim().isEmpty()
+                    || txtSalary.getText().trim().isEmpty() || txtAllowance.getText().trim().isEmpty()
+                    || txtSSS.getText().trim().isEmpty() || txtPhil.getText().trim().isEmpty()
+                    || txtTIN.getText().trim().isEmpty() || txtPagibig.getText().trim().isEmpty()) {
+
+                JOptionPane.showMessageDialog(this, "All fields are required!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validate salary and allowance (must be valid floats)
+            float salary, allowance;
+            try {
+                salary = Float.parseFloat(txtSalary.getText().trim());
+                allowance = Float.parseFloat(txtAllowance.getText().trim());
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Salary and Allowance must be valid numbers!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validate government IDs (must be digits only)
+            if (!txtSSS.getText().trim().matches("\\d+")
+                    || !txtPhil.getText().trim().matches("\\d+")
+                    || !txtTIN.getText().trim().matches("\\d+")
+                    || !txtPagibig.getText().trim().matches("\\d+")) {
+
+                JOptionPane.showMessageDialog(this, "SSS, PhilHealth, TIN, and Pag-IBIG numbers must contain digits only!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // If all validations pass, proceed to save
+            int id = (int) (System.currentTimeMillis() % 100000); // Simple ID generation
             String first = txtFirstName.getText().trim();
             String last = txtLastName.getText().trim();
-            int age = Integer.parseInt(txtAge.getText().trim());
-            String pos = txtPosition.getText().trim();
-            float salary = Float.parseFloat(txtSalary.getText().trim());
-            float allow = Float.parseFloat(txtAllowance.getText().trim());
 
             String sss = txtSSS.getText().trim();
             String phil = txtPhil.getText().trim();
@@ -61,8 +93,8 @@ public class NewEmployeeForm extends JFrame{
             String pag = txtPagibig.getText().trim();
 
             GovernmentDetails gov = new GovernmentDetails(sss, phil, tin, pag);
-            CompensationDetails comp = new CompensationDetails(salary, allow);
-            Employee emp = new Employee(id, last, first, age, pos, salary, gov, comp);
+            CompensationDetails comp = new CompensationDetails(salary, allowance);
+            Employee emp = new Employee(id, last, first, salary, gov, comp);
 
             List<Employee> employees = CSVHandler.loadEmployees("data/employee.csv");
             employees.add(emp);
@@ -71,9 +103,7 @@ public class NewEmployeeForm extends JFrame{
             parentFrame.refreshTable();
             dispose();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    }
-    
-
+}

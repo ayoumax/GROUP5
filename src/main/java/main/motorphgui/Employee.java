@@ -27,19 +27,16 @@ public class Employee {
     float calculateTax;
  
 
-    public Employee(int employeeId, String lastName, String firstName,int age, String position, float salary, 
-            GovernmentDetails govDetails, CompensationDetails compensation) {
+    public Employee(int employeeId, String lastName, String firstName, float basicSalary, GovernmentDetails governmentDetails, CompensationDetails compensationDetails) {
         this.employeeId = employeeId;
         this.lastName = lastName;
         this.firstName = firstName;
-        this.age = age;
-        this.position = position;
-        this.salary = salary;
-         this.govDetails = govDetails;
-        this.compensation = compensation;
+        this.salary = basicSalary;
+        this.govDetails = governmentDetails;
+        this.compensation = compensationDetails;
     }
 
-    Employee(int id, String fullName, int age, String position, float salary, GovernmentDetails gov, CompensationDetails comp) {
+    Employee(int id, String fullName, float salary, GovernmentDetails gov, CompensationDetails comp) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
         // Getters and Setters
@@ -150,5 +147,9 @@ public class Employee {
 
     public GovernmentDetails getGovernmentDetails() {
     return govDetails;
-}
+    }
+
+    public void setGovernmentDetails(GovernmentDetails gov) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

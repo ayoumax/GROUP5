@@ -27,8 +27,7 @@ public class CSVHandler {
                 GovernmentDetails gov = new GovernmentDetails(csv.getSss(), csv.getPhilHealth(), csv.getTin(), csv.getPagIbig());
                 CompensationDetails comp = new CompensationDetails(csv.getBasicSalary(), csv.getAllowance());
 
-                Employee emp = new Employee(csv.getEmployeeId(), csv.getLastName(), csv.getFirstName(), 
-                                             csv.getAge(), csv.getPosition(), csv.getBasicSalary(), gov, comp);
+                Employee emp = new Employee(csv.getEmployeeId(), csv.getLastName(), csv.getFirstName(), csv.getBasicSalary(), gov, comp);
                 employees.add(emp);
             }
         } catch (Exception e) {
@@ -49,8 +48,6 @@ public class CSVHandler {
                 csv.setEmployeeId(emp.getEmployeeId());
                 csv.setLastName(emp.getLastName());
                 csv.setFirstName(emp.getFirstName());
-                csv.setAge(emp.getAge());
-                csv.setPosition(emp.getPosition());
                 csv.setBasicSalary(emp.getSalary());
                 csv.setAllowance(emp.getCompensation().getAllowance());
 
@@ -77,15 +74,24 @@ public class CSVHandler {
                 .withIgnoreLeadingWhiteSpace(true)
                 .build();
 
-        for (EmployeeCSV csv : csvToBean) {
-            System.out.println("Loaded CSV Row" + csv.getEmployeeId()+ "-" + csv.getFirstName());
-            GovernmentDetails gov = new GovernmentDetails(csv.getSss(), csv.getPhilHealth(), csv.getTin(), csv.getPagIbig());
-            CompensationDetails comp = new CompensationDetails(csv.getBasicSalary(), csv.getAllowance());
-            Employee emp;
-            emp = new Employee(csv.getEmployeeId(), csv.getLastName(), csv.getFirstName(),
-                    csv.getAge(), csv.getPosition(), csv.getBasicSalary(), gov, comp);
-            employees.add(emp);
-        }
+            for (EmployeeCSV csv : csvToBean) {
+                GovernmentDetails gov = new GovernmentDetails(
+                        csv.getSss(), csv.getPhilHealth(), csv.getTin(), csv.getPagIbig());
+
+                CompensationDetails comp = new CompensationDetails(
+                        csv.getBasicSalary(), csv.getAllowance());
+
+                Employee emp = new Employee(
+                        csv.getEmployeeId(),
+                        csv.getLastName(),
+                        csv.getFirstName(),
+                        csv.getBasicSalary(), // use basic salary directly as 'salary'
+                        gov,
+                        comp
+                );
+                employees.add(emp);
+                System.out.println("Loaded: " + csv.getEmployeeId() + " " + csv.getFirstName());
+            }
     } catch (Exception e) {
         System.err.println("Error loading from CSV: " + e.getMessage());
         e.printStackTrace();
@@ -104,8 +110,6 @@ public class CSVHandler {
             csv.setEmployeeId(emp.getEmployeeId());
             csv.setLastName(emp.getLastName());
             csv.setFirstName(emp.getFirstName());
-            csv.setAge(emp.getAge());
-            csv.setPosition(emp.getPosition());
             csv.setBasicSalary(emp.getSalary());
             csv.setAllowance(emp.getCompensation().getAllowance());
 

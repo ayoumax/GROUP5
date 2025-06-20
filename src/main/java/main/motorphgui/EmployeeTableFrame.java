@@ -20,12 +20,13 @@ import main.motorphgui.CSVHandler;
 public class EmployeeTableFrame extends JFrame {
     private JTable table;
     private JTextField txtLastName, txtFirstName, txtSSS, txtPhil, txtTIN, txtPagIbig;
+    private JTextField txtSalary, txtAllowance;
     private JButton btnUpdate, btnDelete;
     private DefaultTableModel tableModel;
     private List<Employee> employeeList;
 
     public EmployeeTableFrame() {
-        setTitle("MotorPH Employee List");
+        setTitle("MotorPH Dashboard");
         setSize(800, 500);
         setLayout(null);
 //JTable set up
@@ -36,25 +37,28 @@ public class EmployeeTableFrame extends JFrame {
         scrollPane.setBounds(20, 20, 740, 200);
         add(scrollPane);
 
-        JButton btnView = new JButton("View Employee");
+        JButton btnView = new JButton("View Payslip");
         btnView.setBounds(20, 240, 150, 30);
         add(btnView);
 
-        JButton btnAdd = new JButton("Add");
+        JButton btnAdd = new JButton("Add Employee");
         btnAdd.setBounds(180, 240, 150, 30);
         add(btnAdd);
         
         // Update and Delete buttons
-        btnUpdate = new JButton("Update");
+        btnUpdate = new JButton("Update Employee");
         btnUpdate.setBounds(340, 240, 150, 30);
-        btnUpdate.setEnabled(false);
+        btnUpdate.addActionListener(e -> updateEmployee());
         add(btnUpdate);
+        btnUpdate.setEnabled(true);
 
-        btnDelete = new JButton("Delete");
+        btnDelete = new JButton("Delete Employee");
         btnDelete.setBounds(500, 240, 150, 30);
-        btnDelete.setEnabled(false);
+        btnDelete.addActionListener(e -> deleteEmployee());
         add(btnDelete);
+        btnDelete.setEnabled(true);
 
+        
         loadEmployees();
 
         btnView.addActionListener(e -> viewSelectedEmployee());
@@ -64,7 +68,8 @@ public class EmployeeTableFrame extends JFrame {
         txtLastName = new JTextField(); txtFirstName = new JTextField();
         txtSSS = new JTextField(); txtPhil = new JTextField();
         txtTIN = new JTextField(); txtPagIbig = new JTextField();
-
+        
+        
         int y = 280;
         int height = 25;
         String[] labels = {"Last Name", "First Name", "SSS", "PhilHealth", "TIN", "Pag-IBIG"};
@@ -76,8 +81,6 @@ public class EmployeeTableFrame extends JFrame {
             fields[i].setBounds(110 + (i % 3) * 250, y + (i / 3) * 40, 120, height);
             add(lbl); add(fields[i]);
         }
-
-        
     }
 
     private void loadEmployees() {
@@ -92,7 +95,7 @@ public class EmployeeTableFrame extends JFrame {
             });
         }
     }
-
+        
     private void viewSelectedEmployee() {
         int row = table.getSelectedRow();
         if (row != -1) {
@@ -104,12 +107,7 @@ public class EmployeeTableFrame extends JFrame {
         txtSSS.setText(gov.getSssNumber());
         txtPhil.setText(gov.getPhilHealthNumber());
         txtTIN.setText(gov.getTin());
-        txtPagIbig.setText(gov.getPagIbigNumber());
-
-        btnUpdate.setEnabled(true);
-        btnDelete.setEnabled(true);
-        btnUpdate.addActionListener(e -> updateEmployee());
-        btnDelete.addActionListener(e -> deleteEmployee());
+        txtPagIbig.setText(gov.getPagIbigNumber());        
     }
 }
 
@@ -121,25 +119,59 @@ public class EmployeeTableFrame extends JFrame {
         loadEmployees();
     }
     private void updateEmployee() {
-    int row = table.getSelectedRow();
-    if (row != -1) {
-        Employee emp = employeeList.get(row);
-        emp.setLastName(txtLastName.getText());
-        emp.setFirstName(txtFirstName.getText());
-        GovernmentDetails gov = emp.getGovernmentDetails();
-        gov.setSssNumber(txtSSS.getText());
-        gov.setPhilHealthNumber(txtPhil.getText());
-        gov.setTin(txtTIN.getText());
-        gov.setPagIbigNumber(txtPagIbig.getText());
+        try {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Please select an employee to update!", "No Selection", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-        CSVHandler.saveEmployees(employeeList);
-        refreshTable();
-        clearFields();
-        JOptionPane.showMessageDialog(this, "Employee updated successfully!");
-    } else {
-        JOptionPane.showMessageDialog(this, "No employee selected.");
+            // Get updated values from text fields
+            String firstName = txtFirstName.getText().trim();
+            String lastName = txtLastName.getText().trim();
+            String sss = txtSSS.getText().trim();
+            String phil = txtPhil.getText().trim();
+            String tin = txtTIN.getText().trim();
+            String pagibig = txtPagIbig.getText().trim();
+
+            // Validation checks
+            if (firstName.isEmpty() || lastName.isEmpty()
+                    || sss.isEmpty() || phil.isEmpty() || tin.isEmpty() || pagibig.isEmpty()) {
+
+                JOptionPane.showMessageDialog(this, "All fields are required!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!sss.matches("\\d+") || !phil.matches("\\d+") || !tin.matches("\\d+") || !pagibig.matches("\\d+")) {
+                JOptionPane.showMessageDialog(this, "SSS, PhilHealth, TIN, and Pag-IBIG numbers must contain digits only!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Update Employee object
+            Employee emp = employeeList.get(selectedRow);
+            emp.setFirstName(firstName);
+            emp.setLastName(lastName);
+
+            CompensationDetails comp = emp.getCompensation();
+            emp.setCompensation(comp);
+
+            GovernmentDetails gov = emp.getGovernmentDetails();
+            gov.setSssNumber(sss);
+            gov.setPhilHealthNumber(phil);
+            gov.setTin(tin);
+            gov.setPagIbigNumber(pagibig);
+            emp.setGovernmentDetails(gov);
+
+            // Save updated list to CSV
+            CSVHandler.saveEmployees(employeeList, "data/employee.csv");
+            refreshTable();
+
+            JOptionPane.showMessageDialog(this, "Employee updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error updating employee: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
-}
 
     private void deleteEmployee() {
     int row = table.getSelectedRow();
@@ -148,18 +180,15 @@ public class EmployeeTableFrame extends JFrame {
         CSVHandler.saveEmployees(employeeList);
         refreshTable();
         clearFields();
+        btnDelete.setEnabled(true);
     }
 }
 
     private void clearFields() {
     txtLastName.setText(""); txtFirstName.setText("");
     txtSSS.setText(""); txtPhil.setText("");
-    txtTIN.setText(""); txtPagIbig.setText("");
-    btnUpdate.setEnabled(false);
-    btnDelete.setEnabled(false);
-    
-}
-    
+    txtTIN.setText(""); txtPagIbig.setText(""); 
+    }
 }
     
 
