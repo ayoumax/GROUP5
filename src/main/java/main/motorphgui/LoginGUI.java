@@ -4,9 +4,11 @@
  */
 package main.motorphgui;
 
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,13 +30,13 @@ public class LoginGUI extends JFrame implements ActionListener {
 
     public LoginGUI() {
         setTitle("MotorPH Login");
-        setSize(400, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center window
-
+        setResizable(false);
+        
         login = new Login("data/logins.csv"); // CSV file location
 
-        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
+         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JLabel lblUsername = new JLabel("Username:");
         txtUsername = new JTextField(14);
@@ -47,15 +49,22 @@ public class LoginGUI extends JFrame implements ActionListener {
 
         btnLogin.addActionListener(this);
         btnCancel.addActionListener(this);
+        
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        buttonPanel.add(btnLogin);
+        buttonPanel.add(btnCancel);
 
         panel.add(lblUsername);
         panel.add(txtUsername);
         panel.add(lblPassword);
         panel.add(txtPassword);
-        panel.add(btnLogin);
-        panel.add(btnCancel);
-
+        panel.add(new JLabel());     
+        panel.add(buttonPanel); 
+        
         add(panel);
+        getRootPane().setDefaultButton(btnLogin);
+        pack();
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 

@@ -21,24 +21,20 @@ public class Employee {
     private String firstName;
     private int age;
     private String position;
-    private float salary; // per day
+    private float hourlyRate; // per hour
     private GovernmentDetails govDetails; 
     private CompensationDetails compensation;
-    float calculateTax;
+  
  
-
     public Employee(int employeeId, String lastName, String firstName, float basicSalary, GovernmentDetails governmentDetails, CompensationDetails compensationDetails) {
         this.employeeId = employeeId;
         this.lastName = lastName;
         this.firstName = firstName;
-        this.salary = basicSalary;
+        this.hourlyRate = basicSalary;
         this.govDetails = governmentDetails;
         this.compensation = compensationDetails;
     }
 
-    Employee(int id, String fullName, float salary, GovernmentDetails gov, CompensationDetails comp) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
         // Getters and Setters
     public int getEmployeeId() {
         return employeeId;
@@ -52,14 +48,14 @@ public class Employee {
         return lastName;
     }
 
-    public void setLastName(String lastname) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
      public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstname) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
@@ -80,11 +76,11 @@ public class Employee {
     }
 
     public float getSalary() {
-        return salary;// per day salary
+        return hourlyRate;// per hour
     }
 
     public void setSalary(float salary) {
-        this.salary = salary;
+        this.hourlyRate = salary;
     }
 
     public GovernmentDetails getGovDetails() {
@@ -104,10 +100,11 @@ public class Employee {
     }
 
     // Functionality methods
-    public Payslip viewPayslip() {
-        float tax = calculateTax();
-        float netPay = salary - tax;
-        return new Payslip(this.employeeId, salary, tax, netPay);
+    public Payslip viewPayslip(float hoursWorked) {
+        float grossPay = (hourlyRate* hoursWorked) + compensation.getAllowance();
+        float tax = calculateTax(grossPay);
+        float netPay = grossPay - tax;
+        return new Payslip(this.employeeId, grossPay, tax, netPay);
     }
 
     public boolean updateProfile(String newLastName,String newFirstName, int newAge, String newPosition, float newSalary) {
@@ -115,7 +112,7 @@ public class Employee {
         this.firstName = newFirstName;
         this.age = newAge;
         this.position = newPosition;
-        this.salary = newSalary;
+        this.hourlyRate = newSalary;
         return true;
     }
 
@@ -123,33 +120,31 @@ public class Employee {
         return new Leave(0, employeeId, startDate, endDate, "Pending");
     }
 
-    public float calculateTax() {
+    public float calculateTax(float grossPay) {
+    
         float taxAmount;
-        if (salary <= 20833) {
+        if (grossPay <= 20833) {
             taxAmount = 0;
-        } else if (salary <= 33332) {
-            taxAmount = (salary - 20833) * 0.20f;
-        } else if (salary <= 66666) {
-            taxAmount = 2500 + (salary - 33333) * 0.25f;
+        } else if (grossPay <= 33332) {
+            taxAmount = (grossPay - 20833) * 0.20f;
+        } else if (grossPay <= 66666) {
+            taxAmount = 2500 + (grossPay - 33333) * 0.25f;
         } else {
-            taxAmount = 10833 + (salary - 66667) * 0.30f;
+            taxAmount = 10833 + (grossPay - 66667) * 0.30f;
         }
         return taxAmount;
     }
 
-    public List<Float> viewTaxableDetails() {
-        return List.of(salary, calculateTax());
+    public List<Float> viewTaxableDetails(float hoursWorked) {
+    float grossPay = (hourlyRate * hoursWorked) + compensation.getAllowance();
+    float tax = calculateTax(grossPay);
+    return List.of(grossPay, tax);
     }
 
     public CompensationDetails getCompensationDetails() {
     return compensation;
     }
-
-    public GovernmentDetails getGovernmentDetails() {
-    return govDetails;
-    }
-
     public void setGovernmentDetails(GovernmentDetails gov) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    this.govDetails = gov;
+}
 }

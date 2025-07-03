@@ -68,12 +68,14 @@ public class EmployeeTableFrame extends JFrame {
         txtLastName = new JTextField(); txtFirstName = new JTextField();
         txtSSS = new JTextField(); txtPhil = new JTextField();
         txtTIN = new JTextField(); txtPagIbig = new JTextField();
+        txtSalary = new JTextField();
+        txtAllowance = new JTextField();
         
         
         int y = 280;
         int height = 25;
-        String[] labels = {"Last Name", "First Name", "SSS", "PhilHealth", "TIN", "Pag-IBIG"};
-        JTextField[] fields = {txtLastName, txtFirstName, txtSSS, txtPhil, txtTIN, txtPagIbig};
+        String[] labels = {"Last Name", "First Name", "SSS", "PhilHealth", "TIN", "Pag-IBIG", "Salary", "Allowance"};
+        JTextField[] fields = {txtLastName, txtFirstName, txtSSS, txtPhil, txtTIN, txtPagIbig,txtSalary, txtAllowance};
 
         for (int i = 0; i < labels.length; i++) {
             JLabel lbl = new JLabel(labels[i] + ":");
@@ -87,7 +89,7 @@ public class EmployeeTableFrame extends JFrame {
         employeeList = CSVHandler.loadEmployees("data/employee.csv");
         tableModel.setRowCount(0); // Clear
         for (Employee emp : employeeList) {
-            GovernmentDetails gov = emp.getGovernmentDetails();
+            GovernmentDetails gov = emp.getGovDetails();
             tableModel.addRow(new Object[]{
                 emp.getEmployeeId(), emp.getLastName(), emp.getFirstName(),
                 gov.getSssNumber(), gov.getPhilHealthNumber(),
@@ -101,7 +103,7 @@ public class EmployeeTableFrame extends JFrame {
         if (row != -1) {
             Employee emp = employeeList.get(row);
             new ViewEmployeeFrame(emp).setVisible(true);
-            GovernmentDetails gov = emp.getGovernmentDetails();
+            GovernmentDetails gov = emp.getGovDetails();
              txtLastName.setText(emp.getLastName());
         txtFirstName.setText(emp.getFirstName());
         txtSSS.setText(gov.getSssNumber());
@@ -155,7 +157,7 @@ public class EmployeeTableFrame extends JFrame {
             CompensationDetails comp = emp.getCompensation();
             emp.setCompensation(comp);
 
-            GovernmentDetails gov = emp.getGovernmentDetails();
+            GovernmentDetails gov = emp.getGovDetails();
             gov.setSssNumber(sss);
             gov.setPhilHealthNumber(phil);
             gov.setTin(tin);

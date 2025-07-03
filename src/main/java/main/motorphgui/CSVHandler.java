@@ -51,7 +51,7 @@ public class CSVHandler {
                 csv.setBasicSalary(emp.getSalary());
                 csv.setAllowance(emp.getCompensation().getAllowance());
 
-                GovernmentDetails gov = emp.getGovernmentDetails();
+                GovernmentDetails gov = emp.getGovDetails();
                 csv.setSss(gov.getSssNumber());
                 csv.setPhilHealth(gov.getPhilHealthNumber());
                 csv.setTin(gov.getTin());
@@ -113,7 +113,7 @@ public class CSVHandler {
             csv.setBasicSalary(emp.getSalary());
             csv.setAllowance(emp.getCompensation().getAllowance());
 
-            GovernmentDetails gov = emp.getGovernmentDetails();
+            GovernmentDetails gov = emp.getGovDetails();
             csv.setSss(gov.getSssNumber());
             csv.setPhilHealth(gov.getPhilHealthNumber());
             csv.setTin(gov.getTin());
