@@ -13,7 +13,7 @@ public class GovernmentDetails {
     private String philHealthNumber;
     private String tin;
     private String pagIbigNumber;
-    
+    private String govDetails;
 
     public GovernmentDetails(String sssNumber, String philHealthNumber,String tin, String pagIbigNumber) {
         this.sssNumber = sssNumber;
