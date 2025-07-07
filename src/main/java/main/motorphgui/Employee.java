@@ -1,150 +1,78 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package main.motorphgui;
 
-import java.time.LocalDate;
-import java.util.List;
-import main.motorphgui.CompensationDetails;
-import main.motorphgui.GovernmentDetails;
-import main.motorphgui.Payslip;
+import java.util.Map;
 
-/**
- *
- * @author Ayou
- */
 public class Employee {
-
     private int employeeId;
-    private String lastName;
-    private String firstName;
-    private int age;
+    private String fullName;
     private String position;
-    private float hourlyRate; // per hour
-    private GovernmentDetails govDetails; 
-    private CompensationDetails compensation;
-  
- 
-    public Employee(int employeeId, String lastName, String firstName, float basicSalary, GovernmentDetails governmentDetails, CompensationDetails compensationDetails) {
+
+    private double hourlyRate;
+    private double riceSubsidy;
+    private double phoneAllowance;
+    private double clothingAllowance;
+
+    public Employee(int employeeId, String fullName, String position) {
         this.employeeId = employeeId;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.hourlyRate = basicSalary;
-        this.govDetails = governmentDetails;
-        this.compensation = compensationDetails;
+        this.fullName = fullName;
+        this.position = position;
     }
 
-        // Getters and Setters
+    // Getters
     public int getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-     public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
+    public String getFullName() {
+        return fullName;
     }
 
     public String getPosition() {
         return position;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public double getHourlyRate() {
+        return hourlyRate;
     }
 
-    public float getSalary() {
-        return hourlyRate;// per hour
+    public double getRiceSubsidy() {
+        return riceSubsidy;
     }
 
-    public void setSalary(float salary) {
-        this.hourlyRate = salary;
+    public double getPhoneAllowance() {
+        return phoneAllowance;
     }
 
-    public GovernmentDetails getGovDetails() {
-        return govDetails;
+    public double getClothingAllowance() {
+        return clothingAllowance;
     }
 
-    public void setGovDetails(GovernmentDetails govDetails) {
-        this.govDetails = govDetails;
+    // Setters
+    public void setHourlyRate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
     }
 
-    public CompensationDetails getCompensation() {
-        return compensation;
+    public void setRiceSubsidy(double riceSubsidy) {
+        this.riceSubsidy = riceSubsidy;
     }
 
-    public void setCompensation(CompensationDetails compensation) {
-        this.compensation = compensation;
+    public void setPhoneAllowance(double phoneAllowance) {
+        this.phoneAllowance = phoneAllowance;
     }
 
-    // Functionality methods
-    public Payslip viewPayslip(float hoursWorked) {
-        float grossPay = (hourlyRate* hoursWorked) + compensation.getAllowance();
-        float tax = calculateTax(grossPay);
-        float netPay = grossPay - tax;
-        return new Payslip(this.employeeId, grossPay, tax, netPay);
+    public void setClothingAllowance(double clothingAllowance) {
+        this.clothingAllowance = clothingAllowance;
     }
-
-    public boolean updateProfile(String newLastName,String newFirstName, int newAge, String newPosition, float newSalary) {
-        this.lastName = newLastName;
-        this.firstName = newFirstName;
-        this.age = newAge;
-        this.position = newPosition;
-        this.hourlyRate = newSalary;
-        return true;
-    }
-
-    public Leave applyLeave(LocalDate startDate, LocalDate endDate, String reason) {
-        return new Leave(0, employeeId, startDate, endDate, "Pending");
-    }
-
-    public float calculateTax(float grossPay) {
     
-        float taxAmount;
-        if (grossPay <= 20833) {
-            taxAmount = 0;
-        } else if (grossPay <= 33332) {
-            taxAmount = (grossPay - 20833) * 0.20f;
-        } else if (grossPay <= 66666) {
-            taxAmount = 2500 + (grossPay - 33333) * 0.25f;
-        } else {
-            taxAmount = 10833 + (grossPay - 66667) * 0.30f;
+    Map<Integer, CompensationRow> compData = CompensationLoader.loadCompensation("data/compensation.csv");
+
+    for (Employee emp : employeeList) {
+    CompensationRow comp = compData.get(emp.getEmployeeId());
+        if (comp != null) {
+            emp.setHourlyRate(comp.getHourlyRate());
+            emp.setRiceSubsidy(comp.getRiceSubsidy());
+            emp.setPhoneAllowance(comp.getPhoneAllowance());
+            emp.setClothingAllowance(comp.getClothingAllowance());
         }
-        return taxAmount;
     }
-
-    public List<Float> viewTaxableDetails(float hoursWorked) {
-    float grossPay = (hourlyRate * hoursWorked) + compensation.getAllowance();
-    float tax = calculateTax(grossPay);
-    return List.of(grossPay, tax);
-    }
-
-    public CompensationDetails getCompensationDetails() {
-    return compensation;
-    }
-    public void setGovernmentDetails(GovernmentDetails gov) {
-    this.govDetails = gov;
-}
 }

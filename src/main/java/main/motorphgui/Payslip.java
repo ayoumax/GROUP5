@@ -8,16 +8,27 @@ package main.motorphgui;
  *
  * @author WINDOWS 10
  */
+
+import main.motorphgui.GovernmentDetails;
+
 public class Payslip {
-     private int employeeId;
+    private int employeeId;
     private float grossPay;
     private float tax;
     private float netPay;
+    private String sssNumber;
+    private String philHealthNumber;
+    private String tin;
+    private String pagIbigNumber;
+    private String govDetails;
+    private String witholdingTax;
+    private double governmentDeduction;
+    
 
-    public Payslip(int employeeId, float grossPay, float tax, float netPay) {
+    public Payslip(int employeeId, float grossPay, double withholdingTax, float netPay) {
         this.employeeId = employeeId;
         this.grossPay = grossPay;
-        this.tax = tax;
+        this.witholdingTax = witholdingTax;
         this.netPay = netPay;
     }
 
