@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  *
- * @author WINDOWS 10
+ * @author Kristel
  */
 public class AttendanceRecord {
     

@@ -6,7 +6,7 @@ package main.motorphgui;
 
 /**
  *
- * @author WINDOWS 10
+ * @author Kristel
  */
 import java.util.ArrayList;
 import java.util.List;

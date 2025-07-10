@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  *
- * @author WINDOWS 10
+ * @author Kristel
  */
 public class AttendanceLoader {
     

@@ -6,7 +6,7 @@ package main.motorphgui;
 
 /**
  *
- * @author Ayou
+ * @author Macky
  */
 
 import javax.swing.SwingUtilities;

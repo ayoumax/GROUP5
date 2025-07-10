@@ -6,7 +6,7 @@ package main.motorphgui;
 
 /**
  *
- * @author Ayou
+ * @author Macky
  */
 public class Tax {
 
