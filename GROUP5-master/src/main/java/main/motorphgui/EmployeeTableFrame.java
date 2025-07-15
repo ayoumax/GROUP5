@@ -65,7 +65,7 @@ public class EmployeeTableFrame extends JFrame {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         buttonPanel.setBackground(Color.WHITE);
 
-        String[] buttonLabels = {"View Employee", "New Employee", "Update Employee", "Delete Employee", "Refresh"};
+        String[] buttonLabels = {"View Employee", "New Employee", "Update", "Delete", "Refresh"};
         JButton[] buttons = new JButton[buttonLabels.length];
         Color primary = new Color(45, 140, 240);
 
@@ -79,14 +79,14 @@ public class EmployeeTableFrame extends JFrame {
             buttonPanel.add(buttons[i]);
         }
 
-        JButton btnViewPayslip = buttons[0];
+        JButton btnViewEmployee = buttons[0];
         JButton btnAdd = buttons[1];
         JButton btnUpdate = buttons[2];
         JButton btnDelete = buttons[3];
         JButton btnRefresh = buttons[4];
 
         // === Add listeners ===
-        btnViewPayslip.addActionListener(e -> viewPayslip());
+        btnViewEmployee.addActionListener(e -> viewEmployee());
         btnAdd.addActionListener(e -> new NewEmployeeForm(this).setVisible(true));
         btnUpdate.addActionListener(e -> updateEmployee());
         btnDelete.addActionListener(e -> deleteEmployee());
@@ -159,7 +159,7 @@ public class EmployeeTableFrame extends JFrame {
         pack();
     }
 
-    private void viewPayslip() {
+    private void viewEmployee() {
         int selectedRow = employeeTable.getSelectedRow();
         if (selectedRow >= 0) {
             int empId = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
