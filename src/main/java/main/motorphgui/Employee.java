@@ -8,8 +8,8 @@ package main.motorphgui;
  *
  * @author Macky
  */
-public class Employee {
 
+public class Employee {
     private int employeeId;
     private String lastName;
     private String firstName;
@@ -36,6 +36,7 @@ public class Employee {
 
     public String getFirstName() {
         return firstName;
+
     }
 
     public String getPosition() {
