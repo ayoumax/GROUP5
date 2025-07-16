@@ -112,7 +112,7 @@ public class PayrollCalculator {
 
         StringBuilder sb = new StringBuilder();
         
-        sb.append("================================= MOTORPH PAYROLL ==================================\n");
+        sb.append("================================= MOTORPH PAYSLIP ==================================\n");
         
         sb.append(String.format("Employee Name:   %-20s Position:    %-20s\n", fullName, position));
         sb.append(String.format("Employee ID:     %-20s Supervisor:  %-20s\n", employeeId, supervisor));
