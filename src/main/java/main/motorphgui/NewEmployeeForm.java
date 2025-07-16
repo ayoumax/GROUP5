@@ -3,107 +3,97 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package main.motorphgui;
-import javax.swing.*;
-import java.util.List;
-import java.awt.*;
 
 /**
  *
- * @author WINDOWS 10
+ * @author Macky
  */
-public class NewEmployeeForm extends JFrame{
-    private JTextField txtFirstName, txtLastName, txtSalary, txtAllowance;
-    private JTextField txtSSS, txtPhil, txtTIN, txtPagibig;
-    private EmployeeTableFrame parentFrame;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class NewEmployeeForm extends JFrame {
+
+    private JTextField[] fields = new JTextField[14];
+    private String[] labels = {
+        "Employee ID", "Last Name", "First Name", "SSS", "PhilHealth", "TIN", "Pag-IBIG",
+        "Position", "Immediate Supervisor", "Monthly Salary",
+        "Rice Subsidy", "Phone Allowance", "Clothing Allowance", "Hourly Rate"
+    };
+
+    private EmployeeTableFrame parent;
 
     public NewEmployeeForm(EmployeeTableFrame parent) {
-         this.parentFrame = parent;
-        setTitle("New Employee");
-        setSize(400, 450);
-        setLayout(null);
+        this.parent = parent;
 
-        String[] labels = {"First Name", "Last Name", "Salary", "Allowance", "SSS", "PhilHealth", "TIN", "PagIBIG"};
-        JTextField[] fields = new JTextField[labels.length];
+        setTitle("Add New Employee");
+        setLayout(new BorderLayout());
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        // Font and color
+        Font labelFont = new Font("Segoe UI", Font.BOLD, 13);
+        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 13);
+        Color bgColor = new Color(245, 245, 250);
+        Color buttonColor = new Color(66, 133, 244); // blue
+        Color buttonTextColor = Color.WHITE;
+
+        JPanel inputPanel = new JPanel(new GridLayout(14, 2, 10, 10));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        inputPanel.setBackground(bgColor);
+
         for (int i = 0; i < labels.length; i++) {
             JLabel lbl = new JLabel(labels[i] + ":");
-            lbl.setBounds(20, 30 + i * 30, 100, 25);
-            add(lbl);
+            lbl.setFont(labelFont);
+            inputPanel.add(lbl);
 
             fields[i] = new JTextField();
-            fields[i].setBounds(130, 30 + i * 30, 200, 25);
-            add(fields[i]);
+            fields[i].setFont(fieldFont);
+            fields[i].setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(180, 180, 180)),
+                    BorderFactory.createEmptyBorder(5, 5, 5, 5)
+            ));
+            inputPanel.add(fields[i]);
         }
 
-        txtFirstName = fields[0];
-        txtLastName = fields[1];
-        txtSalary = fields[2];
-        txtAllowance = fields[3];
-        txtSSS = fields[4];
-        txtPhil = fields[5];
-        txtTIN = fields[6];
-        txtPagibig = fields[7];
+        JButton saveButton = new JButton("Save");
+        saveButton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        saveButton.setBackground(buttonColor);
+        saveButton.setForeground(buttonTextColor);
+        saveButton.setFocusPainted(false);
+        saveButton.setPreferredSize(new Dimension(120, 35));
+        saveButton.addActionListener(e -> saveEmployee());
 
-        JButton btnSave = new JButton("Save");
-        btnSave.setBounds(130, 370, 100, 30);
-        add(btnSave);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(bgColor);
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
+        buttonPanel.add(saveButton);
 
-        btnSave.addActionListener(e -> saveNewEmployee());
+        add(inputPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        getContentPane().setBackground(bgColor);
+        setSize(450, 680);
+        setLocationRelativeTo(null);
     }
 
-    private void saveNewEmployee() {
+    private void saveEmployee() {
         try {
-            // Validate required text fields
-            if (txtFirstName.getText().trim().isEmpty() || txtLastName.getText().trim().isEmpty()
-                    || txtSalary.getText().trim().isEmpty() || txtAllowance.getText().trim().isEmpty()
-                    || txtSSS.getText().trim().isEmpty() || txtPhil.getText().trim().isEmpty()
-                    || txtTIN.getText().trim().isEmpty() || txtPagibig.getText().trim().isEmpty()) {
-
-                JOptionPane.showMessageDialog(this, "All fields are required!", "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
+            List<String> row = new ArrayList<>();
+            for (int i = 0; i < fields.length; i++) {
+                if (fields[i].getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please fill all fields.");
+                    return;
+                }
+                row.add(fields[i].getText().trim());
             }
 
-            // Validate salary and allowance (must be valid floats)
-            float salary, allowance;
-            try {
-                salary = Float.parseFloat(txtSalary.getText().trim());
-                allowance = Float.parseFloat(txtAllowance.getText().trim());
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Salary and Allowance must be valid numbers!", "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Validate government IDs (must be digits only)
-            if (!txtSSS.getText().trim().matches("\\d+")
-                    || !txtPhil.getText().trim().matches("\\d+")
-                    || !txtTIN.getText().trim().matches("\\d+")
-                    || !txtPagibig.getText().trim().matches("\\d+")) {
-
-                JOptionPane.showMessageDialog(this, "SSS, PhilHealth, TIN, and Pag-IBIG numbers must contain digits only!", "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // If all validations pass, proceed to save
-            int id = (int) (System.currentTimeMillis() % 100000); // Simple ID generation
-            String first = txtFirstName.getText().trim();
-            String last = txtLastName.getText().trim();
-
-            String sss = txtSSS.getText().trim();
-            String phil = txtPhil.getText().trim();
-            String tin = txtTIN.getText().trim();
-            String pag = txtPagibig.getText().trim();
-
-            GovernmentDetails gov = new GovernmentDetails(sss, phil, tin, pag);
-            CompensationDetails comp = new CompensationDetails(salary, allowance);
-            Employee emp = new Employee(id, last, first, salary, gov, comp);
-
-            List<Employee> employees = CSVHandler.loadEmployees("data/employee.csv");
-            employees.add(emp);
-            CSVHandler.saveEmployees(employees, "data/employee.csv");
-
-            parentFrame.refreshTable();
+            CSVHandler.appendEmployee(row, "data/employee.csv");
+            parent.loadEmployees();
             dispose();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error saving employee: " + ex.getMessage());
         }
     }
 }

@@ -6,23 +6,22 @@ package main.motorphgui;
 
 /**
  *
- * @author WINDOWS 10
+ * @author Kristel
  */
 public class GovernmentDetails {
+
     private String sssNumber;
     private String philHealthNumber;
-    private String tin;
+    private String tinNumber;
     private String pagIbigNumber;
-    private String govDetails;
-    private String witholdingTax;
-    private double governmentDeduction;
 
-    //Constructor
-    public GovernmentDetails(String sssNumber, String philHealthNumber,String tin, String pagIbigNumber) {
-        this.sssNumber = sssNumber;
-        this.philHealthNumber = philHealthNumber;
-        this.tin = tin;
-        this.pagIbigNumber = pagIbigNumber;
+    // Constructor
+    public GovernmentDetails(String sss, String philHealth, String tin, String pagIbig) {
+        this.sssNumber = sss;
+        this.philHealthNumber = philHealth;
+        this.tinNumber = tin;
+        this.pagIbigNumber = pagIbig;
+
     }
     
     //Constructor
@@ -163,15 +162,14 @@ public class GovernmentDetails {
         return philHealthNumber;
     }
 
-    public String getTin() {
-        return tin;
+    public String getTinNumber() {
+        return tinNumber;
     }
 
     public String getPagIbigNumber() {
         return pagIbigNumber;
     }
 
-    // Optional setters if you want to allow editing
     public void setSssNumber(String sssNumber) {
         this.sssNumber = sssNumber;
     }
@@ -180,13 +178,13 @@ public class GovernmentDetails {
         this.philHealthNumber = philHealthNumber;
     }
 
-    public void setTin(String tin) {
-        this.tin = tin;
+    public void setTinNumber(String tinNumber) {
+        this.tinNumber = tinNumber;
     }
 
     public void setPagIbigNumber(String pagIbigNumber) {
         this.pagIbigNumber = pagIbigNumber;
     }
+    
 }
-
     

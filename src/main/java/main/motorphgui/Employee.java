@@ -1,78 +1,81 @@
+    /*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package main.motorphgui;
 
-import java.util.Map;
+/**
+ *
+ * @author Macky
+ */
 
 public class Employee {
     private int employeeId;
-    private String fullName;
+    private String lastName;
+    private String firstName;
     private String position;
+    private String immediateSupervisor;
+    private GovernmentDetails governmentDetails;
+    private CompensationDetails compensationDetails;
 
-    private double hourlyRate;
-    private double riceSubsidy;
-    private double phoneAllowance;
-    private double clothingAllowance;
-
-    public Employee(int employeeId, String fullName, String position) {
-        this.employeeId = employeeId;
-        this.fullName = fullName;
-        this.position = position;
+    public Employee(int id, String last, String first, GovernmentDetails gov, CompensationDetails comp) {
+        this.employeeId = id;
+        this.lastName = last;
+        this.firstName = first;
+        this.governmentDetails = gov;
+        this.compensationDetails = comp;
     }
 
-    // Getters
     public int getEmployeeId() {
         return employeeId;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+
     }
 
     public String getPosition() {
         return position;
     }
 
-    public double getHourlyRate() {
-        return hourlyRate;
+    public String getImmediateSupervisor() {
+        return immediateSupervisor;
     }
 
-    public double getRiceSubsidy() {
-        return riceSubsidy;
+    public GovernmentDetails getGovernmentDetails() {
+        return governmentDetails;
     }
 
-    public double getPhoneAllowance() {
-        return phoneAllowance;
+    public CompensationDetails getCompensationDetails() {
+        return compensationDetails;
     }
 
-    public double getClothingAllowance() {
-        return clothingAllowance;
+    public void setPosition(String position) {
+        this.position = position;
     }
 
-    // Setters
-    public void setHourlyRate(double hourlyRate) {
-        this.hourlyRate = hourlyRate;
+    public void setImmediateSupervisor(String supervisor) {
+        this.immediateSupervisor = supervisor;
     }
 
-    public void setRiceSubsidy(double riceSubsidy) {
-        this.riceSubsidy = riceSubsidy;
+    public void setGovernmentDetails(GovernmentDetails governmentDetails) {
+        this.governmentDetails = governmentDetails;
     }
 
-    public void setPhoneAllowance(double phoneAllowance) {
-        this.phoneAllowance = phoneAllowance;
-    }
-
-    public void setClothingAllowance(double clothingAllowance) {
-        this.clothingAllowance = clothingAllowance;
+    public void setCompensationDetails(CompensationDetails compensationDetails) {
+        this.compensationDetails = compensationDetails;
     }
     
-    Map<Integer, CompensationRow> compData = CompensationLoader.loadCompensation("data/compensation.csv");
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-    for (Employee emp : employeeList) {
-    CompensationRow comp = compData.get(emp.getEmployeeId());
-        if (comp != null) {
-            emp.setHourlyRate(comp.getHourlyRate());
-            emp.setRiceSubsidy(comp.getRiceSubsidy());
-            emp.setPhoneAllowance(comp.getPhoneAllowance());
-            emp.setClothingAllowance(comp.getClothingAllowance());
-        }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 }
