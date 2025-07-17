@@ -77,4 +77,8 @@ public class Employee {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
+    Object getSSS() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
