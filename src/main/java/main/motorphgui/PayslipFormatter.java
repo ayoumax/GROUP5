@@ -6,7 +6,7 @@ package main.motorphgui;
 
 /**
  *
- * @author Trapal RYN
+ * @author rowel
  */
 
 import java.text.DecimalFormat;

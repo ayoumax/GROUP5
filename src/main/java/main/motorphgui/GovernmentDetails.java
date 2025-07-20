@@ -14,6 +14,7 @@ public class GovernmentDetails {
     private String philHealthNumber;
     private String tinNumber;
     private String pagIbigNumber;
+    private int governmentDeduction;
 
     // Constructor
     public GovernmentDetails(String sss, String philHealth, String tin, String pagIbig) {
@@ -27,7 +28,7 @@ public class GovernmentDetails {
     //Constructor
     public double calculateGovernmentDeducatiteGovermentDeductionon (double calculatePagibig, double calculatePhilhealth, double calculateSSS) {
         this.governmentDeduction = governmentDeduction;
-        governmentDeduction = calculatePagibig + calculatePhilhealth + calculateSSS;
+        governmentDeduction = (int) (calculatePagibig + calculatePhilhealth + calculateSSS);
         return governmentDeduction;
     }
     

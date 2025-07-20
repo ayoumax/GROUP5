@@ -38,6 +38,10 @@ public class Employee {
         return firstName;
 
     }
+    
+    public String getFullName(){
+        return firstName + lastName;
+    }
 
     public String getPosition() {
         return position;
@@ -59,10 +63,6 @@ public class Employee {
         this.position = position;
     }
 
-    public void setImmediateSupervisor(String supervisor) {
-        this.immediateSupervisor = supervisor;
-    }
-
     public void setGovernmentDetails(GovernmentDetails governmentDetails) {
         this.governmentDetails = governmentDetails;
     }
@@ -77,5 +77,21 @@ public class Employee {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    double getHourlyRate() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    double getRiceSubsidy() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    double getPhoneAllowance() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    double getClothingAllowance() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  *
- * @author Kristel
+ * @author rowel
  */
 public class AttendanceRecord {
     
@@ -58,11 +58,3 @@ public class AttendanceRecord {
     }
   
 }
-
-//Usage:
-//
-//List<AttendanceRecord> recs =
-//        AttendanceLoader.load(Path.of("data/attendance.csv"));
-//
-//recs.forEach(r -> System.out.println(
-//        r.getEmployeeId() + " " + r.getDate() + " " + r.getTotalHoursWorked()));

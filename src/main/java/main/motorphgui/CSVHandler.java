@@ -71,7 +71,6 @@ public class CSVHandler {
                     CompensationDetails comp = new CompensationDetails(salary, rice, phone, clothing, hourly);
                     Employee emp = new Employee(id, last, first, gov, comp);
                     emp.setPosition(position);
-                    emp.setImmediateSupervisor(supervisor);
 
                     employees.add(emp);
                 } catch (Exception inner) {

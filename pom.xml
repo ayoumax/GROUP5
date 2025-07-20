@@ -22,6 +22,12 @@
             <artifactId>opencsv</artifactId>
             <version>5.10</version>
         </dependency>
+        <dependency>
+            <groupId>com.haoxuer.bigworld</groupId>
+            <artifactId>bigworld-company</artifactId>
+            <version>3.3.17-20220716</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>

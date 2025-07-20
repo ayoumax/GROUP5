@@ -5,10 +5,6 @@
 
 package main.motorphgui;
 
-/**
- *
- * @author Macky
- */
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -22,15 +18,19 @@ public class EmployeeTableFrame extends JFrame {
     private List<Employee> employeeList; 
     private final String csvFilePath = "data/employee.csv";
 
+    private JTextField txtEmployeeId, txtFirstName, txtLastName, txtSSS, txtPhilHealth, txtTIN, txtPagibig;
+    private JButton btnUpdate, btnDelete;
+
     public EmployeeTableFrame() {
         setTitle("MotorPH Dashboard");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
-        getContentPane().setBackground(Color.WHITE);
+        setMinimumSize(new Dimension(1000, 700));
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        // Table Header
         String[] columnNames = {"Employee ID", "Last Name", "First Name", "SSS", "PhilHealth", "TIN", "Pag-IBIG"};
         tableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -46,7 +46,6 @@ public class EmployeeTableFrame extends JFrame {
         employeeTable.setSelectionForeground(Color.BLACK);
         employeeTable.getTableHeader().setReorderingAllowed(false);
 
-        employeeTable.setPreferredScrollableViewportSize(null);
         JScrollPane scrollPane = new JScrollPane(employeeTable);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
@@ -56,16 +55,49 @@ public class EmployeeTableFrame extends JFrame {
         tablePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
         tablePanel.setBackground(Color.WHITE);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
+        tablePanel.setMinimumSize(new Dimension(600, 0));
+        tablePanel.setPreferredSize(new Dimension(900, 800));
 
-        int tableHeight = employeeTable.getRowCount() * employeeTable.getRowHeight();
-        tablePanel.setPreferredSize(new Dimension(920, 800));
+        JPanel formPanel = new JPanel(new GridLayout(10, 2, 5, 5));
+        formPanel.setMinimumSize(new Dimension(300, 0));
+        formPanel.setBackground(Color.WHITE);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 10));
 
-        // === Button Panel ===
+        txtEmployeeId = new JTextField();
+        txtEmployeeId.setEditable(false);
+        txtLastName = new JTextField();
+        txtFirstName = new JTextField();
+        txtSSS = new JTextField();
+        txtPhilHealth = new JTextField();
+        txtTIN = new JTextField();
+        txtPagibig = new JTextField();
+
+        formPanel.add(new JLabel("Employee ID*:"));
+        formPanel.add(txtEmployeeId);
+        formPanel.add(new JLabel("Last Name*:"));
+        formPanel.add(txtLastName);
+        formPanel.add(new JLabel("First Name*:"));
+        formPanel.add(txtFirstName);
+        formPanel.add(new JLabel("SSS*:"));
+        formPanel.add(txtSSS);
+        formPanel.add(new JLabel("PhilHealth*:"));
+        formPanel.add(txtPhilHealth);
+        formPanel.add(new JLabel("TIN*:"));
+        formPanel.add(txtTIN);
+        formPanel.add(new JLabel("Pag-IBIG*:"));
+        formPanel.add(txtPagibig);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel, tablePanel);
+        splitPane.setResizeWeight(0.0);
+        splitPane.setDividerLocation(350);
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setPreferredSize(new Dimension(1200, 700));
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         buttonPanel.setBackground(Color.WHITE);
 
-        String[] buttonLabels = {"View Payslip", "Add Employee", "Update Employee", "Delete Employee", "Refresh"};
+        String[] buttonLabels = {"View Employee", "Add Employee", "Update Employee", "Delete Employee", "Refresh"};
         JButton[] buttons = new JButton[buttonLabels.length];
         Color primary = new Color(45, 140, 240);
 
@@ -81,11 +113,12 @@ public class EmployeeTableFrame extends JFrame {
 
         JButton btnViewPayslip = buttons[0];
         JButton btnAdd = buttons[1];
-        JButton btnUpdate = buttons[2];
-        JButton btnDelete = buttons[3];
+        btnUpdate = buttons[2];
+        btnDelete = buttons[3];
         JButton btnRefresh = buttons[4];
+        btnUpdate.setEnabled(false);
+        btnDelete.setEnabled(false);
 
-        // === Add listeners ===
         btnViewPayslip.addActionListener(e -> viewPayslip());
         btnAdd.addActionListener(e -> new NewEmployeeForm(this).setVisible(true));
         btnUpdate.addActionListener(e -> updateEmployee());
@@ -95,9 +128,6 @@ public class EmployeeTableFrame extends JFrame {
             adjustTableHeight();
         });
 
-        // === Final Layout ===
-        add(tablePanel, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
         JButton btnLogout = new JButton("Logout");
         btnLogout.setFocusPainted(false);
         btnLogout.setBackground(new Color(200, 50, 50));
@@ -112,14 +142,21 @@ public class EmployeeTableFrame extends JFrame {
                 SwingUtilities.invokeLater(() -> new LoginGUI());
             }
         });
-        
+
+        employeeTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && employeeTable.getSelectedRow() != -1) {
+                populateFields(employeeTable.getSelectedRow());
+                btnUpdate.setEnabled(true);
+                btnDelete.setEnabled(true);
+            }
+        });
+
         buttonPanel.add(btnLogout);
 
-        add(tablePanel, BorderLayout.CENTER);
+        add(splitPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        adjustTableHeight();
-        setSize(950, 850);
+        pack();
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -148,27 +185,33 @@ public class EmployeeTableFrame extends JFrame {
         }
     }
 
+    private void populateFields(int row) {
+        txtEmployeeId.setText(tableModel.getValueAt(row, 0).toString());
+        txtLastName.setText(tableModel.getValueAt(row, 1).toString());
+        txtFirstName.setText(tableModel.getValueAt(row, 2).toString());
+        txtSSS.setText(tableModel.getValueAt(row, 3).toString());
+        txtPhilHealth.setText(tableModel.getValueAt(row, 4).toString());
+        txtTIN.setText(tableModel.getValueAt(row, 5).toString());
+        txtPagibig.setText(tableModel.getValueAt(row, 6).toString());
+    }
+
     public void adjustTableHeight() {
         int rowCount = tableModel.getRowCount();
         int rowHeight = employeeTable.getRowHeight();
         int headerHeight = employeeTable.getTableHeader().getPreferredSize().height;
         int totalHeight = (rowCount * rowHeight) + headerHeight + 20;
-
         Dimension size = new Dimension(employeeTable.getPreferredSize().width, totalHeight);
         employeeTable.setPreferredSize(size);
-        pack();
     }
 
     private void viewPayslip() {
         int selectedRow = employeeTable.getSelectedRow();
         if (selectedRow >= 0) {
             int empId = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
-
             Employee selectedEmployee = employeeList.stream()
                     .filter(e -> e.getEmployeeId() == empId)
                     .findFirst()
                     .orElse(null);
-
             if (selectedEmployee != null) {
                 SwingUtilities.invokeLater(() -> {
                     ViewEmployeeFrame frame = new ViewEmployeeFrame(selectedEmployee);
@@ -184,29 +227,58 @@ public class EmployeeTableFrame extends JFrame {
     }
 
     private void updateEmployee() {
-    int selectedRow = employeeTable.getSelectedRow();
-    if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(this, "Please select an employee to update.");
-        return;
-    }
+        try {
+            int selectedRow = employeeTable.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Please select an employee to update!", "No Selection", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-    int empId = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
+            // Get updated values from text fields
+            String firstName = txtFirstName.getText().trim();
+            String lastName = txtLastName.getText().trim();
+            String sss = txtSSS.getText().trim();
+            String phil = txtPhilHealth.getText().trim();
+            String tin = txtTIN.getText().trim();
+            String pagibig = txtPagibig.getText().trim();
 
-    Employee selectedEmp = null;
-    for (Employee emp : employeeList) {
-        if (emp.getEmployeeId() == empId) {
-            selectedEmp = emp;
-            break;
+            // Validation checks
+            if (firstName.isEmpty() || lastName.isEmpty()
+                    || sss.isEmpty() || phil.isEmpty() || tin.isEmpty() || pagibig.isEmpty()) {
+
+                JOptionPane.showMessageDialog(this, "All fields are required!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!sss.matches("\\d+") || !phil.matches("\\d+") || !tin.matches("\\d+") || !pagibig.matches("\\d+")) {
+                JOptionPane.showMessageDialog(this, "SSS, PhilHealth, TIN, and Pag-IBIG numbers must contain digits only!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Update Employee object
+            Employee emp = employeeList.get(selectedRow);
+            emp.setFirstName(firstName);
+            emp.setLastName(lastName);
+
+            GovernmentDetails gov = emp.getGovernmentDetails();
+            gov.setSssNumber(sss);
+            gov.setPhilHealthNumber(phil);
+            gov.setTinNumber(tin);
+            gov.setPagIbigNumber(pagibig);
+            emp.setGovernmentDetails(gov);
+
+            // Save updated list to CSV
+            CSVHandler.saveEmployees(employeeList, "data/employee.csv");
+            refreshTable();
+            clearFields();
+                    
+            JOptionPane.showMessageDialog(this, "Employee updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (HeadlessException ex) {
+            JOptionPane.showMessageDialog(this, "Error updating employee: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    if (selectedEmp != null) {
-        UpdateEmployeeFrame updateFrame = new UpdateEmployeeFrame(selectedEmp, employeeList, csvFilePath, this);
-        updateFrame.setVisible(true);
-    } else {
-        JOptionPane.showMessageDialog(this, "Selected employee not found.");
-    }
-}
 
     private void deleteEmployee() {
         int selectedRow = employeeTable.getSelectedRow();
@@ -214,7 +286,7 @@ public class EmployeeTableFrame extends JFrame {
             int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this employee?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 int empId = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
-                employeeList.removeIf(e -> e.getEmployeeId() == empId); // FIX: use employeeList
+                employeeList.removeIf(e -> e.getEmployeeId() == empId);
                 CSVHandler.saveEmployees(employeeList, "data/employee.csv");
                 refreshTable();
                 adjustTableHeight();
@@ -223,6 +295,14 @@ public class EmployeeTableFrame extends JFrame {
             JOptionPane.showMessageDialog(this, "Please select an employee to delete.");
         }
     }
-}
     
+    private void clearFields() {
+        txtLastName.setText("");
+        txtFirstName.setText("");
+        txtSSS.setText("");
+        txtPhilHealth.setText("");
+        txtTIN.setText("");
+        txtPagibig.setText("");
+    }
+}
 
