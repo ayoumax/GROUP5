@@ -105,17 +105,10 @@ public class ViewEmployeeFrame extends JFrame {
         topPanel.add(lblMonth);
         topPanel.add(cmbMonth);
 
-        JLabel lblWeek = new JLabel("Select Week:");
-        lblWeek.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        cmbWeek = new JComboBox<>();
-        cmbWeek.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        topPanel.add(lblWeek);
-        topPanel.add(cmbWeek);
-
-        JButton btnGenerate = new JButton("Compute");
-        styleButton(btnGenerate);
+        JButton btnCompute = new JButton("Compute");
+        styleButton(btnCompute);
         topPanel.add(new JLabel()); // empty cell
-        topPanel.add(btnGenerate);
+        topPanel.add(btnCompute);
         add(topPanel, BorderLayout.NORTH);
 
         // === Payslip Text Area ===
@@ -142,11 +135,11 @@ public class ViewEmployeeFrame extends JFrame {
             dispose();
         });
 
-        btnGenerate.addActionListener(e -> generatePayslip());
+        btnCompute.addActionListener(e -> generatePayslip());
 
-        cmbMonth.addActionListener(e -> populateWeeks());
+        cmbMonth.addActionListener(e -> populateMonths());
 
-        populateMonths();
+
     }
 
     private void styleButton(JButton button) {
@@ -165,28 +158,17 @@ public class ViewEmployeeFrame extends JFrame {
         }
         if (cmbMonth.getItemCount() > 0) {
             cmbMonth.setSelectedIndex(0);
-            populateWeeks();
         }
     }
 
-    private void populateWeeks() {
-        cmbWeek.removeAllItems();
-        String selectedMonth = (String) cmbMonth.getSelectedItem();
-        if (selectedMonth != null) {
-            List<String> weeks = PayrollCalculator.getWeeksForEmployeeMonth(employee.getEmployeeId(), selectedMonth);
-            for (String w : weeks) {
-                cmbWeek.addItem(w);
-            }
-        }
-    }
 
     private void generatePayslip() {
-        String selectedWeek = (String) cmbWeek.getSelectedItem();
-        if (selectedWeek != null) {
-            String payslip = PayrollCalculator.generatePayslip(employee.getEmployeeId(), (String) cmbMonth.getSelectedItem(), selectedWeek);
+        String selectedMonth = (String) cmbMonth.getSelectedItem();
+        if (selectedMonth != null) {
+            String payslip = PayrollCalculator.generatePayslip(employee.getEmployeeId(), (String) cmbMonth.getSelectedItem(), selectedMonth);
             txtPayslip.setText(payslip);
         } else {
-            JOptionPane.showMessageDialog(this, "Please select a valid week.");
+            JOptionPane.showMessageDialog(this, "Please select a valid month.");
         }
     }
 }

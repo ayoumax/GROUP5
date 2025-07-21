@@ -203,19 +203,19 @@ public class PayrollCalculator {
 
     public static List<String> getWeeksForEmployeeMonth(int employeeId, String selectedMonth) {
         if (selectedMonth.equals("June")) {
-            return Arrays.asList("Week-6/3/2024", "Week-6/10/2024", "Week-6/17/2024", "Week-6/24/2024");
+           return Arrays.asList("Week-6/3/2024", "Week-6/10/2024", "Week-6/17/2024", "Week-6/24/2024");
         } else if (selectedMonth.equals("July")) {
-            return Arrays.asList("Week-7/1/2024", "Week-7/8/2024", "Week-7/15/2024", "Week-7/22/2024", "Week-7/29/2024");
+           return Arrays.asList("Week-7/1/2024", "Week-7/8/2024", "Week-7/15/2024", "Week-7/22/2024", "Week-7/29/2024");
         } else if (selectedMonth.equals("August")) {    
-            return Arrays.asList("Week-8/5/2024", "Week-8/12/2024", "Week-8/19/2024", "Week-8/26/2024");
+           return Arrays.asList("Week-8/5/2024", "Week-8/12/2024", "Week-8/19/2024", "Week-8/26/2024");
         } else if (selectedMonth.equals("September")) {    
-            return Arrays.asList("Week-9/2/2024", "Week-9/9/2024", "Week-9/16/2024", "Week-9/23/2024", "Week-9/30/2024");
+           return Arrays.asList("Week-9/2/2024", "Week-9/9/2024", "Week-9/16/2024", "Week-9/23/2024", "Week-9/30/2024");
         } else if (selectedMonth.equals("October")) {    
-            return Arrays.asList("Week-10/7/2024", "Week-10/14/2024", "Week-10/21/2024", "Week-10/28/2024");
+           return Arrays.asList("Week-10/7/2024", "Week-10/14/2024", "Week-10/21/2024", "Week-10/28/2024");
         } else if (selectedMonth.equals("November")) {    
-            return Arrays.asList("Week-11/4/2024", "Week-11/11/2024", "Week-11/18/2024", "Week-11/25/2024");
+           return Arrays.asList("Week-11/4/2024", "Week-11/11/2024", "Week-11/18/2024", "Week-11/25/2024");
         } else if (selectedMonth.equals("December")) {    
-            return Arrays.asList("Week-12/2/2024", "Week-12/9/2024", "Week-12/16/2024", "Week-12/23/2024", "Week-12/30/2024");
+           return Arrays.asList("Week-12/2/2024", "Week-12/9/2024", "Week-12/16/2024", "Week-12/23/2024", "Week-12/30/2024");
         }
         return new ArrayList<>();
     }

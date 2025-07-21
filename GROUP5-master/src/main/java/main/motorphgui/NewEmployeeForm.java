@@ -19,7 +19,6 @@ public class NewEmployeeForm extends JFrame {
     private JTextField[] fields = new JTextField[14];
     private String[] labels = {
         "Employee ID* ", "Last Name* ", "First Name* ", "SSS* ", "PhilHealth* ", "TIN* ", "Pag-IBIG* ",
-        "Position* ", "Immediate Supervisor* ", "Monthly Salary* ",
         "Rice Subsidy* ", "Phone Allowance* ", "Clothing Allowance* ", "Hourly Rate* "
     };
 
