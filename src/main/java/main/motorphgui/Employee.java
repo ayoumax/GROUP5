@@ -38,6 +38,10 @@ public class Employee {
         return firstName;
     }
 
+    public String getFullName() {
+        return firstName + lastName;
+    }
+
     public String getPosition() {
         return position;
     }
