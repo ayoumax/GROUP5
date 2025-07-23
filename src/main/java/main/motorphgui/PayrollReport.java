@@ -6,7 +6,7 @@ package main.motorphgui;
 
 /**
  *
- * @author WINDOWS 10
+ * @author Kristel
  */
 public class PayrollReport {
   private int employeeId;

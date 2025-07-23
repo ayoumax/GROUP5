@@ -3,71 +3,210 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package main.motorphgui;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 /**
  *
- * @author WINDOWS 10
+ * @author Macky
  */
-public class ViewEmployeeFrame extends JFrame{
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.List;
+
+public class ViewEmployeeFrame extends JFrame {
+
+    private JComboBox<String> cmbMonth;
+    private JComboBox<String> cmbYear;
+    private JTextArea txtPayslip;   
     private Employee employee;
-    private JComboBox<String> monthBox;
-    private JTextArea resultArea;
 
     public ViewEmployeeFrame(Employee emp) {
-       this.employee = emp;
+        this.employee = emp;
+
         setTitle("View Employee Details");
-        setSize(400, 400);
-        setLayout(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // ✅ Close properly
+        setSize(900, 800);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout(15, 10));
+        getContentPane().setBackground(Color.WHITE);
 
-        JLabel label = new JLabel("Employee: " + emp.getFirstName() + " " + emp.getLastName());
-        label.setBounds(20, 20, 300, 25);
-        add(label);
+        // Top Panel with Grid
+        JPanel topPanel = new JPanel(new GridBagLayout());
+        topPanel.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(4, 8, 4, 8);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = 1;
+        
+        // Helper method to add label-value pairs
+        int row = 0;
 
-        JLabel monthLabel = new JLabel("Select Month:");
-        monthLabel.setBounds(20, 60, 100, 25);
-        add(monthLabel);
+        String[][] fields = {
+            {"Employee ID:", String.valueOf(emp.getEmployeeId())},
+            {"Last Name:", emp.getLastName()},
+            {"First Name:", emp.getFirstName()},
+            {"Position:", emp.getPosition()},
+            {"Immediate Supervisor:", emp.getImmediateSupervisor()},
+            {"SSS Number:", emp.getGovernmentDetails().getSssNumber()},
+            {"Philhealth Number:", emp.getGovernmentDetails().getPhilHealthNumber()},
+            {"TIN:", emp.getGovernmentDetails().getTinNumber()},
+            {"Pag-IBIG Number:", emp.getGovernmentDetails().getPagIbigNumber()}
+        };
 
-        monthBox = new JComboBox<>(new String[]{
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
+        // Lay out fields 3 columns per row
+        for (int i = 0; i < fields.length; i++) {
+            int col = i % 3;
+            row = i / 3;
+
+            gbc.gridx = col * 2;
+            gbc.gridy = row;
+            gbc.weightx = 0;
+            JLabel label = new JLabel(fields[i][0]);
+            label.setFont(new Font("Segoe UI", Font.BOLD, 13));
+            topPanel.add(label, gbc);
+
+            gbc.gridx = col * 2 + 1;
+            gbc.weightx = 1;
+            JLabel value = new JLabel(fields[i][1]);
+            value.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+            topPanel.add(value, gbc);
+        }
+
+        // Add dropdowns
+        row += 1;
+        gbc.gridy = row;
+        gbc.gridx = 0;
+        topPanel.add(new JLabel("Select Month:"), gbc);
+
+        gbc.gridx = 1;
+        cmbMonth = new JComboBox<>();
+        populateMonths();
+        cmbMonth.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        topPanel.add(cmbMonth, gbc);
+
+        gbc.gridx = 2;
+        topPanel.add(new JLabel("Select Year:"), gbc);
+
+        gbc.gridx = 3;
+        cmbYear = new JComboBox<>();
+        populateYears();
+        cmbYear.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        topPanel.add(cmbYear, gbc);
+
+        // Add compute button aligned right
+        gbc.gridx = 4;
+        JButton btnCompute = new JButton("Compute");
+        styleButton(btnCompute);
+        topPanel.add(btnCompute, gbc);
+
+        add(topPanel, BorderLayout.NORTH);
+
+        // Payslip Text Area 
+        txtPayslip = new JTextArea(30, 80); // set preferred size
+        txtPayslip.setFont(new Font("Consolas", Font.PLAIN, 13));
+        txtPayslip.setEditable(false);
+        txtPayslip.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        txtPayslip.setLineWrap(false);
+        txtPayslip.setWrapStyleWord(false);
+        
+        // Wrap JTextArea inside JScrollPane
+        JScrollPane scrollPane = new JScrollPane(txtPayslip);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        
+        // Create center panel with FlowLayout to center the scrollPane
+        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        centerPanel.setBackground(Color.WHITE);
+        centerPanel.add(scrollPane);
+
+        // Add to main layout
+        add(centerPanel, BorderLayout.CENTER);
+        
+        txtPayslip.setMargin(new Insets(10, 20, 10, 20));
+        
+        
+
+        //  Bottom Button 
+        JButton btnBack = new JButton("Back to Dashboard");
+        styleButton(btnBack);
+        btnBack.setPreferredSize(new Dimension(200, 40));
+
+        JPanel southPanel = new JPanel();
+        southPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        southPanel.setBackground(Color.WHITE);
+        southPanel.add(btnBack);
+        add(southPanel, BorderLayout.SOUTH);
+
+        //  Action Logic 
+        btnBack.addActionListener(e -> {
+            new EmployeeTableFrame().setVisible(true);
+            dispose();
         });
-        monthBox.setBounds(120, 60, 200, 25);
-        add(monthBox);
+        
+        btnCompute.addActionListener(e -> generatePayslip());
+        populateMonths();
+        setVisible(true);
 
-        JButton computeBtn = new JButton("Compute");
-        computeBtn.setBounds(20, 100, 100, 30);
-        add(computeBtn);
-
-        resultArea = new JTextArea();
-        resultArea.setEditable(false);
-        JScrollPane pane = new JScrollPane(resultArea);
-        pane.setBounds(20, 140, 340, 200);
-        add(pane);
-
-        computeBtn.addActionListener(e -> computePay());
     }
 
-    private void computePay() {
-        String selectedMonth = (String) monthBox.getSelectedItem(); // ✅ show month
-        float tax = employee.calculateTax();
-        float gross = employee.getSalary() * 22 + employee.getCompensation().getAllowance(); // 22 days default
-        Payroll payroll = new Payroll(1, employee.getEmployeeId(), gross, 0, tax);
-        payroll.calculateSalary();
+    private void styleButton(JButton button) {
+        button.setBackground(new Color(45, 140, 240));
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        button.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
+    }
 
-        resultArea.setText("Month: " + selectedMonth +
-                "\nPosition: " + employee.getPosition() +
-                "\nGross: ₱" + gross +
-                "\nTax: ₱" + tax +
-                "\nNet: ₱" + payroll.getNetSalary());
+    private void populateMonths() {
+        cmbMonth.removeAllItems();
+        String[] months = {
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    };
+         
+        for (String m : months) {
+            cmbMonth.addItem(m);
+        }
+        if (cmbMonth.getItemCount() > 0) {
+            cmbMonth.setSelectedIndex(0);
+        }
+    }
+    
+    private void populateYears() {
+        cmbYear.removeAllItems();
+
+        List<String> availableYears = PayrollCalculator.getAvailableYearsForEmployee(employee.getEmployeeId());
+
+        if (availableYears.isEmpty()) {
+            cmbYear.addItem("No Records");
+            cmbYear.setEnabled(false);
+        } else {
+            for (String year : availableYears) {
+                cmbYear.addItem(year);
+            }
+            cmbYear.setEnabled(true);
+            cmbYear.setSelectedIndex(0);
+        }
+    }
+
+    private void generatePayslip() {
+        String selectedMonth = (String) cmbMonth.getSelectedItem();
+        if (selectedMonth != null) {
+        int month = Month.valueOf(selectedMonth.toUpperCase()).getValue();
+        int year = Integer.parseInt((String) cmbYear.getSelectedItem());
+        
+         List<AttendanceRecord> records = AttendanceLoader.loadAttendanceRecords("data/attendance.csv");
+        AttendanceLoader loader = new AttendanceLoader();
+        float totalHours = loader.calculateMonthlyHoursWorked(employee.getEmployeeId(), month, year, records);
+        
+            String payslip = PayrollCalculator.generatePayslip(employee.getEmployeeId(), selectedMonth, totalHours);
+            txtPayslip.setText(payslip);
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a valid month.");
+        }
     }
 }
-    
+        

@@ -7,7 +7,7 @@ import com.opencsv.bean.CsvBindByName;
 
 /**
  *
- * @author WINDOWS 10
+ * @author Kristel
  */
 public class EmployeeCSV {
     @CsvBindByName(column = "EmployeeId")

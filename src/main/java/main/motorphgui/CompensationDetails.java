@@ -6,30 +6,60 @@ package main.motorphgui;
 
 /**
  *
- * @author WINDOWS 10
+ * @author Macky
  */
 public class CompensationDetails {
-     private float basicSalary;
-    private float allowance;
+    private double monthlySalary;
+    private double riceSubsidy;
+    private double phoneAllowance;
+    private double clothingAllowance;
+    private double hourlyRate;
+
+    public CompensationDetails(double monthlySalary, double riceSubsidy, double phoneAllowance, double clothingAllowance, double hourlyRate) {
+        this.monthlySalary = monthlySalary;
+        this.riceSubsidy = riceSubsidy;
+        this.phoneAllowance = phoneAllowance;
+        this.clothingAllowance = clothingAllowance;
+        this.hourlyRate = hourlyRate;
+    }
+
+    public double getMonthlySalary() {
+        return monthlySalary;
+    }
+
+    public double getRiceSubsidy() {
+        return riceSubsidy;
+    }
+
+    public double getPhoneAllowance() {
+        return phoneAllowance;
+    }
+
+    public double getClothingAllowance() {
+        return clothingAllowance;
+    }
+
+    public double getHourlyRate() {
+        return hourlyRate;
+    }
     
-    public CompensationDetails(float basicSalary, float allowance) {
-        this.basicSalary = basicSalary;
-        this.allowance = allowance;
+    public void setMonthlySalary(double monthlySalary) {
+        this.monthlySalary = monthlySalary;
     }
 
-   public float getBasicSalary() {
-        return basicSalary;
+    public void setRiceSubsidy(double riceSubsidy) {
+        this.riceSubsidy = riceSubsidy;
     }
 
-    public float getAllowance() {
-        return allowance;
+    public void setPhoneAllowance(double phoneAllowance) {
+        this.phoneAllowance = phoneAllowance;
     }
 
-    public float getTotalCompensation() {
-        return basicSalary + allowance;
+    public void setClothingAllowance(double clothingAllowance) {
+        this.clothingAllowance = clothingAllowance;
     }
 
-    void setAllowance(float allowance) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void setHourlyRate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
     }
 }

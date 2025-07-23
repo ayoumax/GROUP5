@@ -3,133 +3,152 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package main.motorphgui;
-import com.opencsv.bean.*;
-import java.io.*;
-import java.util.*;
 
 
 /**
  *
- * @author WINDOWS 10
+ * @author Macky
  */
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
+import java.io.*;
+import java.util.*;
+import javax.swing.JOptionPane;
+
 public class CSVHandler {
-    private static final String CSV_PATH = "data/employee.csv";
 
-     public static List<Employee> loadEmployees() {
+    public static List<String[]> readCSV(String filePath) {
+        List<String[]> records = new ArrayList<>();
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+            String[] line;
+            while ((line = reader.readNext()) != null) {
+                // Skip lines with all fields empty or less than 14 columns
+                if (line.length < 14 || Arrays.stream(line).allMatch(String::isBlank)) {
+                    continue;
+                }
+                records.add(line);
+            }
+        } catch (IOException | CsvValidationException e) {
+            JOptionPane.showMessageDialog(null, "Error reading CSV: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return records;
+    }
+
+    public static List<Employee> loadEmployees(String filePath) {
         List<Employee> employees = new ArrayList<>();
-        try (Reader reader = new FileReader(CSV_PATH)) {
-            CsvToBean<EmployeeCSV> csvToBean = new CsvToBeanBuilder<EmployeeCSV>(reader)
-                .withType(EmployeeCSV.class)
-                .withIgnoreLeadingWhiteSpace(true)
-                .build();
+        try {
+            List<String[]> rows = readCSV(filePath);
 
-            for (EmployeeCSV csv : csvToBean) {
-                GovernmentDetails gov = new GovernmentDetails(csv.getSss(), csv.getPhilHealth(), csv.getTin(), csv.getPagIbig());
-                CompensationDetails comp = new CompensationDetails(csv.getBasicSalary(), csv.getAllowance());
+            // Remove header row if present
+            if (!rows.isEmpty() && rows.get(0)[0].toLowerCase().contains("employee")) {
+                rows.remove(0);
+            }
 
-                Employee emp = new Employee(csv.getEmployeeId(), csv.getLastName(), csv.getFirstName(), csv.getBasicSalary(), gov, comp);
-                employees.add(emp);
+            for (String[] r : rows) {
+                try {
+                    if (r.length < 14) continue; // skip if not enough columns
+
+                    // Defensive trim and fallback to zero if blank
+                    int id = Integer.parseInt(r[0].trim());
+                    String last = r[1].trim().replaceAll("^\"|\"$", "");
+                    String first = r[2].trim().replaceAll("^\"|\"$", "");
+                    String sss = r[3].trim();
+                    String phil = r[4].trim();
+                    String tin = r[5].trim();
+                    String pagibig = r[6].trim();
+                    String position = r[7].trim();
+                    String supervisor = r[8].trim();
+
+                    double salary = parseDoubleSafe(r[9]);
+                    double rice = parseDoubleSafe(r[10]);
+                    double phone = parseDoubleSafe(r[11]);
+                    double clothing = parseDoubleSafe(r[12]);
+                    double hourly = parseDoubleSafe(r[13]);
+
+                    GovernmentDetails gov = new GovernmentDetails(sss, phil, tin, pagibig);
+                    CompensationDetails comp = new CompensationDetails(salary, rice, phone, clothing, hourly);
+                    Employee emp = new Employee(id, last, first, gov, comp);
+                    emp.setPosition(position);
+                    emp.setImmediateSupervisor(supervisor);
+
+                    employees.add(emp);
+                } catch (Exception inner) {
+                    System.err.println("Skipping row due to error: " + Arrays.toString(r));
+                    inner.printStackTrace();
+                }
             }
         } catch (Exception e) {
-            System.err.println("Error loading CSV: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error loading employee data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
         return employees;
     }
 
-    public static void saveEmployees(List<Employee> employees) {
-        try (Writer writer = new FileWriter(CSV_PATH)) {
-            StatefulBeanToCsv<EmployeeCSV> beanToCsv = new StatefulBeanToCsvBuilder<EmployeeCSV>(writer)
-                    .withApplyQuotesToAll(false)
-                    .build();
+    private static double parseDoubleSafe(String value) {
+        try {
+            value = value.trim().replaceAll("\"", "");
+            return value.isEmpty() ? 0 : Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+    
+    public static void appendEmployee(List<String> row, String filepath) {
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(filepath, true))) {
+            pw.println(String.join(",", row));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void saveEmployees(List<Employee> employees, String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            // Write header
+            writer.write("Employee ID,Last Name,First Name,SSS,PhilHealth,TIN,Pag-IBIG,Position,Immediate Supervisor,Monthly Salary,Rice Subsidy,Phone Allowance,Clothing Allowance,Hourly Rate");
+            writer.newLine();
 
-            List<EmployeeCSV> csvList = new ArrayList<>();
             for (Employee emp : employees) {
-                EmployeeCSV csv = new EmployeeCSV();
-                csv.setEmployeeId(emp.getEmployeeId());
-                csv.setLastName(emp.getLastName());
-                csv.setFirstName(emp.getFirstName());
-                csv.setBasicSalary(emp.getSalary());
-                csv.setAllowance(emp.getCompensation().getAllowance());
+                if (emp == null || emp.getGovernmentDetails() == null || emp.getCompensationDetails() == null) {
+                    continue;
+                }
 
-                GovernmentDetails gov = emp.getGovernmentDetails();
-                csv.setSss(gov.getSssNumber());
-                csv.setPhilHealth(gov.getPhilHealthNumber());
-                csv.setTin(gov.getTin());
-                csv.setPagIbig(gov.getPagIbigNumber());
+                String[] row = new String[]{
+                    String.valueOf(emp.getEmployeeId()),
+                    emp.getLastName(),
+                    emp.getFirstName(),
+                    emp.getGovernmentDetails().getSssNumber(),
+                    emp.getGovernmentDetails().getPhilHealthNumber(),
+                    emp.getGovernmentDetails().getTinNumber(),
+                    emp.getGovernmentDetails().getPagIbigNumber(),
+                    emp.getPosition(),
+                    emp.getImmediateSupervisor(),
+                    String.valueOf(emp.getCompensationDetails().getMonthlySalary()),
+                    String.valueOf(emp.getCompensationDetails().getRiceSubsidy()),
+                    String.valueOf(emp.getCompensationDetails().getPhoneAllowance()),
+                    String.valueOf(emp.getCompensationDetails().getClothingAllowance()),
+                    String.valueOf(emp.getCompensationDetails().getHourlyRate())
+                };
 
-                csvList.add(csv);
+                // Quote and escape all values
+                String quotedRow = Arrays.stream(row)
+                        .map(s -> "\"" + (s == null ? "" : s.replace("\"", "\"\"")) + "\"")
+                        .reduce((a, b) -> a + "," + b)
+                        .orElse("");
+
+                writer.write(quotedRow);
+                writer.newLine();
             }
 
-            beanToCsv.write(csvList);
-        } catch (Exception e) {
-            System.err.println("Error saving CSV: " + e.getMessage());
-        }
-    }
-
-    public static List<Employee> loadEmployees(String filePath) {
-          List<Employee> employees = new ArrayList<>();
-        try (Reader reader = new FileReader(filePath)){
-        CsvToBean<EmployeeCSV> csvToBean = new CsvToBeanBuilder<EmployeeCSV>(reader)
-                .withType(EmployeeCSV.class)
-                .withIgnoreLeadingWhiteSpace(true)
-                .build();
-
-            for (EmployeeCSV csv : csvToBean) {
-                GovernmentDetails gov = new GovernmentDetails(
-                        csv.getSss(), csv.getPhilHealth(), csv.getTin(), csv.getPagIbig());
-
-                CompensationDetails comp = new CompensationDetails(
-                        csv.getBasicSalary(), csv.getAllowance());
-
-                Employee emp = new Employee(
-                        csv.getEmployeeId(),
-                        csv.getLastName(),
-                        csv.getFirstName(),
-                        csv.getBasicSalary(), // use basic salary directly as 'salary'
-                        gov,
-                        comp
-                );
-                employees.add(emp);
-                System.out.println("Loaded: " + csv.getEmployeeId() + " " + csv.getFirstName());
-            }
-    } catch (Exception e) {
-        System.err.println("Error loading from CSV: " + e.getMessage());
-        e.printStackTrace();
-    }
-         return employees;
-    }
-        static void saveEmployees(List<Employee> employees, String filePath) {
-    try (Writer writer = new FileWriter(filePath)) {
-        StatefulBeanToCsv<EmployeeCSV> beanToCsv = new StatefulBeanToCsvBuilder<EmployeeCSV>(writer)
-                .withApplyQuotesToAll(false)
-                .build();
-
-        List<EmployeeCSV> csvList = new ArrayList<>();
-        for (Employee emp : employees) {
-            EmployeeCSV csv = new EmployeeCSV();
-            csv.setEmployeeId(emp.getEmployeeId());
-            csv.setLastName(emp.getLastName());
-            csv.setFirstName(emp.getFirstName());
-            csv.setBasicSalary(emp.getSalary());
-            csv.setAllowance(emp.getCompensation().getAllowance());
-
-            GovernmentDetails gov = emp.getGovernmentDetails();
-            csv.setSss(gov.getSssNumber());
-            csv.setPhilHealth(gov.getPhilHealthNumber());
-            csv.setTin(gov.getTin());
-            csv.setPagIbig(gov.getPagIbigNumber());
-
-            csvList.add(csv);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error saving employees: " + e.getMessage());
+            e.printStackTrace();
         }
 
-        beanToCsv.write(csvList);
-    } catch (Exception e) {
-        System.err.println("Error saving to CSV: " + e.getMessage());
     }
-        }
+    
 }
-
-        
     
 
 
